@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>หารค่าอาหาร | HITAP Style</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #1a3f6f;
+    --primary-dark: #0f2a4a;
+    --primary-mid: #1e5090;
+    --accent: #2e8b57;
+    --accent-light: #3cb371;
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --border: #d0d8e4;
+    --border-light: #e8edf4;
+    --text: #1a2535;
+    --text-secondary: #4a5568;
+    --text-muted: #8898aa;
+    --danger: #c0392b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow: 0 2px 8px rgba(26,63,111,0.12);
+    --shadow-lg: 0 4px 20px rgba(26,63,111,0.15);
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  body {
+    font-family: 'Sarabun', 'IBM Plex Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+    color: white;
+    padding: 0;
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.25);
+  }
+  .logo-text h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+  .logo-text p {
+    font-size: 12px;
+    opacity: 0.75;
+    font-weight: 300;
+  }
+  .header-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: var(--primary-dark);
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .nav-tab {
+    padding: 10px 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    font-family: inherit;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+    font-weight: 500;
+  }
+  .nav-tab:hover { color: rgba(255,255,255,0.9); }
+  .nav-tab.active { color: white; border-bottom-color: #7dd3fc; }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .section-heading .section-bar {
+    width: 4px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .section-heading h2 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .card-header {
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-light);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-header-icon {
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .card-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .card-header p { font-size: 12px; color: var(--text-muted); }
+  .card-body { padding: 16px; }
+
+  /* ── COUNT BADGE ── */
+  .count-badge {
+    background: var(--primary);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  /* ── FORM CONTROLS ── */
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .input-row input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-row input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,63,111,0.1);
+  }
+  .input-row input::placeholder { color: var(--text-muted); }
+
+  .btn {
+    height: 36px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-mid); transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-sm {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+  .btn-danger {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+  .btn-danger:hover { background: #fecaca; }
+
+  /* ── LIST ITEMS ── */
+  .list-wrap { display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
+  .list-wrap:empty::before {
+    content: '— ยังไม่มีข้อมูล —';
+    display: block;
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .member-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+  }
+  .member-item-left { display: flex; align-items: center; gap: 10px; }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+    color: white;
+  }
+  .member-name { font-size: 14px; font-weight: 500; }
+
+  .food-item {
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .food-item-top {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .food-icon {
+    width: 30px; height: 30px; border-radius: 6px;
+    background: #e8f4ec;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .food-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .food-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    min-width: 80px;
+    text-align: right;
+  }
+  .food-assign {
+    padding: 4px 12px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-top: 1px dashed var(--border-light);
+    align-items: center;
+  }
+  .assign-label { font-size: 11px; color: var(--text-muted); margin-right: 4px; }
+  .assign-chip {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    background: white;
+    transition: all 0.15s;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .assign-chip:hover { border-color: var(--primary); color: var(--primary); }
+  .assign-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+  .assign-all-tag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 500;
+  }
+
+  /* ── GRID LAYOUT ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── SETTINGS ROW ── */
+  .settings-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+  }
+  .setting-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .setting-group label { font-weight: 500; cursor: pointer; }
+  .setting-group input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--primary); }
+  .setting-group input[type=number] {
+    width: 60px; height: 30px; padding: 0 8px;
+    font-size: 13px; font-family: inherit;
+    border: 1px solid var(--border); border-radius: 4px;
+    background: white; color: var(--text);
+    text-align: center;
+  }
+  .setting-group input[type=number]:focus { outline: none; border-color: var(--primary); }
+  .divider { width: 1px; height: 24px; background: var(--border); }
+
+  /* ── SUMMARY CARDS ── */
+  .summary-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .person-summary {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .person-summary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .person-summary-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .person-summary-name { font-size: 13px; font-weight: 600; }
+  .person-summary-amount {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+  }
+  .person-summary-items { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+
+  /* ── GRAND TOTAL ── */
+  .grand-total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius-lg);
+    margin-top: 8px;
+  }
+  .grand-total-row .label { font-size: 15px; font-weight: 500; opacity: 0.9; }
+  .grand-total-row .amount { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-light);
+    margin-top: 32px;
+    background: white;
+  }
+  footer span { color: var(--primary); font-weight: 600; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── EXPORT BUTTONS ── */
+  .export-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .btn-export {
+    height: 38px;
+    padding: 0 18px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1.5px solid;
+  }
+  .btn-csv {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #a5d6a7;
+  }
+  .btn-csv:hover { background: #c8e6c9; transform: translateY(-1px); }
+  .btn-pdf {
+    background: #fce4ec;
+    color: #c62828;
+    border-color: #f48fb1;
+  }
+  .btn-pdf:hover { background: #f8bbd0; transform: translateY(-1px); }
+  .btn-export:active { transform: translateY(0); }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    .topbar, header, footer, .export-bar, .settings-row,
+    #tab-input, .nav-tabs, .section-heading { display: none !important; }
+    body { background: white; font-size: 13px; }
+    main { padding: 0; max-width: 100%; }
+    #tab-summary { display: block !important; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+    .print-header { display: block !important; }
+    .person-summary { break-inside: avoid; }
+    .grand-total-row { background: #1a3f6f !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .summary-wrap { grid-template-columns: repeat(3, 1fr); }
+  }
+  .print-header { display: none; }
+  @media print {
+    .print-header {
+      display: flex !important;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 0 12px;
+      border-bottom: 2px solid #1a3f6f;
+      margin-bottom: 16px;
+    }
+    .print-header .ph-logo {
+      width: 48px; height: 48px;
+      background: #1a3f6f;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: white;
+    }
+    .print-header h1 { font-size: 18px; color: #1a3f6f; font-weight: 700; }
+    .print-header p { font-size: 12px; color: #666; }
+    .print-meta { margin-left: auto; text-align: right; font-size: 11px; color: #888; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">โครงการหารค่าอาหาร · ระบบจัดการค่าใช้จ่ายร่วมกัน · Food Bill Splitter</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="logo-icon">🍽️</div>
+      <div class="logo-text">
+        <h1>ระบบหารค่าอาหาร</h1>
+        <p>Food Bill Splitter — จัดการค่าใช้จ่ายอย่างโปร่งใส</p>
+      </div>
+    </div>
+    <div class="header-badge">v2.0</div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,0.1)">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="setTab('input',this)">📋 ข้อมูลการสั่ง</button>
+      <button class="nav-tab" onclick="setTab('summary',this)">📊 สรุปยอด</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- TAB: INPUT -->
+  <div id="tab-input">
+    <div class="two-col">
+
+      <!-- MEMBERS -->
+      <div>
+        <div class="section-heading">
+          <div class="section-bar"></div>
+          <h2>รายชื่อสมาชิก</h2>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-header-icon">👥</div>
+              <div>
+                <h3>สมาชิกร่วมโต๊ะ</h3>
+                <p>เพิ่มชื่อผู้ร่วมทานอาหาร</p>
+              </div>
+            </div>
+            <span class="count-badge" id="member-count">0</span>
+          </div>
+          <div class="card-body">
+            <div class="input-row">
+              <input type="text" id="member-input" placeholder="ชื่อสมาชิก..." maxlength="30" />
+              <button class="btn btn-primary" onclick="addMember()">+ เพิ่ม</button>
+            </div>
+            <div class="list-wrap" id="member-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOD ITEMS -->
+      <div>
+        <div class="section-heading">
+          <div class="section-bar"></div>
+          <h2>รายการอาหาร</h2>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-left">
+              <div class="card-header-icon">🍜</div>
+              <div>
+                <h3>เมนูที่สั่ง</h3>
+                <p>เพิ่มรายการอาหารและเครื่องดื่ม</p>
+              </div>
+            </div>
+            <span class="count-badge" id="item-count">0</span>
+          </div>
+          <div class="card-body">
+            <div class="input-row">
+              <input type="text" id="item-name-input" placeholder="ชื่อเมนู..." maxlength="40" style="flex:2" />
+              <input type="number" id="item-price-input" placeholder="ราคา" min="0" step="1" style="flex:1;min-width:80px" />
+              <button class="btn btn-primary" onclick="addItem()">+ เพิ่ม</button>
+            </div>
+            <div class="list-wrap" id="item-list"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB: SUMMARY -->
+  <div id="tab-summary" style="display:none">
+
+    <!-- Print-only header -->
+    <div class="print-header">
+      <div class="ph-logo">🍽️</div>
+      <div>
+        <h1>ระบบหารค่าอาหาร</h1>
+        <p>Food Bill Splitter — สรุปยอดค่าใช้จ่าย</p>
+      </div>
+      <div class="print-meta" id="print-meta"></div>
+    </div>
+
+    <!-- Export buttons -->
+    <div class="export-bar">
+      <button class="btn-export btn-pdf" onclick="exportPDF()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        พิมพ์ / Export PDF
+      </button>
+      <button class="btn-export btn-csv" onclick="exportCSV()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+        Export CSV → Google Sheets
+      </button>
+    </div>
+
+    <div class="section-heading">
+      <div class="section-bar"></div>
+      <h2>ตั้งค่าการคิดเงิน</h2>
+    </div>
+
+    <div class="settings-row">
+      <div class="setting-group">
+        <input type="checkbox" id="vat-check" onchange="renderSummary()" />
+        <label for="vat-check">เพิ่ม VAT</label>
+        <input type="number" id="vat-val" value="7" min="0" max="100" step="1" oninput="renderSummary()" />
+        <span>%</span>
+      </div>
+      <div class="divider"></div>
+      <div class="setting-group">
+        <input type="checkbox" id="sc-check" onchange="renderSummary()" />
+        <label for="sc-check">Service charge</label>
+        <input type="number" id="sc-val" value="10" min="0" max="100" step="1" oninput="renderSummary()" />
+        <span>%</span>
+      </div>
+      <div class="divider"></div>
+      <div class="setting-group" style="font-size:12px;color:var(--text-muted)">
+        💡 รายการที่ไม่กำหนดผู้กิน = หารเท่าๆ กันทุกคน
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <div class="section-bar"></div>
+      <h2>สรุปยอดแต่ละคน</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="padding:16px">
+        <div class="summary-wrap" id="summary-wrap">
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">📋</div>
+            <div>กรุณาเพิ่มสมาชิกและรายการอาหารก่อน</div>
+          </div>
+        </div>
+        <div class="grand-total-row" id="grand-total-row">
+          <span class="label">ยอดรวมทั้งหมด (รวม VAT/SC)</span>
+          <span class="amount" id="grand-total">฿0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <strong><span>ระบบหารค่าอาหาร</span></strong> · พัฒนาโดยทำเอาสนุกเวลาว่าง · ใช้งานฟรีไม่มีการเก็บข้อมูล
+</footer>
+
+<script>
+const COLORS = [
+  '#1a3f6f','#2e7d32','#c0392b','#7b1fa2',
+  '#e65100','#00695c','#283593','#558b2f',
+  '#ad1457','#4527a0'
+];
+
+let members = [], items = [], mid = 0, iid = 0;
+
+function setTab(tab, el) {
+  document.getElementById('tab-input').style.display = tab === 'input' ? '' : 'none';
+  document.getElementById('tab-summary').style.display = tab === 'summary' ? '' : 'none';
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'summary') renderSummary();
+}
+
+function initials(name) {
+  return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function fmt(n) {
+  return '฿' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function addMember() {
+  const inp = document.getElementById('member-input');
+  const name = inp.value.trim();
+  if (!name) { inp.focus(); return; }
+  members.push({ id: ++mid, name, color: COLORS[members.length % COLORS.length] });
+  inp.value = '';
+  inp.focus();
+  renderMembers();
+  renderItems(); // refresh assign chips
+}
+
+function removeMember(id) {
+  members = members.filter(m => m.id !== id);
+  items.forEach(it => { it.assigned = it.assigned.filter(x => x !== id); });
+  renderMembers();
+  renderItems();
+}
+
+function addItem() {
+  const ni = document.getElementById('item-name-input');
+  const pi = document.getElementById('item-price-input');
+  const name = ni.value.trim();
+  const price = parseFloat(pi.value);
+  if (!name) { ni.focus(); return; }
+  if (isNaN(price) || price < 0) { pi.focus(); return; }
+  const icons = ['🍜','🍛','🍣','🥗','🍹','🥤','🍱','🍲','🥩','🐟','🦐','🍰'];
+  items.push({ id: ++iid, name, price, assigned: [], icon: icons[iid % icons.length] });
+  ni.value = ''; pi.value = '';
+  ni.focus();
+  renderItems();
+}
+
+function removeItem(id) {
+  items = items.filter(it => it.id !== id);
+  renderItems();
+}
+
+function toggleAssign(itemId, memberId) {
+  const it = items.find(x => x.id === itemId);
+  if (!it) return;
+  const idx = it.assigned.indexOf(memberId);
+  if (idx > -1) it.assigned.splice(idx, 1);
+  else it.assigned.push(memberId);
+  renderItems();
+}
+
+function renderMembers() {
+  document.getElementById('member-count').textContent = members.length;
+  const el = document.getElementById('member-list');
+  if (!members.length) { el.innerHTML = ''; return; }
+  el.innerHTML = members.map(m => `
+    <div class="member-item">
+      <div class="member-item-left">
+        <div class="avatar" style="background:${m.color}">${initials(m.name)}</div>
+        <span class="member-name">${escHtml(m.name)}</span>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="removeMember(${m.id})">ลบ</button>
+    </div>
+  `).join('');
+}
+
+function renderItems() {
+  document.getElementById('item-count').textContent = items.length;
+  const el = document.getElementById('item-list');
+  if (!items.length) { el.innerHTML = ''; return; }
+  el.innerHTML = items.map(it => {
+    const assignSection = members.length > 0 ? `
+      <div class="food-assign">
+        <span class="assign-label">ผู้กิน:</span>
+        ${it.assigned.length === 0
+          ? `<span class="assign-all-tag">หารทุกคน</span>`
+          : ''}
+        ${members.map(m => {
+          const active = it.assigned.includes(m.id);
+          return `<button class="assign-chip ${active ? 'active' : ''}"
+            style="${active ? `background:${m.color};border-color:${m.color}` : ''}"
+            onclick="toggleAssign(${it.id},${m.id})">${escHtml(m.name)}</button>`;
+        }).join('')}
+      </div>` : '';
+    return `
+      <div class="food-item">
+        <div class="food-item-top">
+          <div class="food-icon">${it.icon}</div>
+          <span class="food-name">${escHtml(it.name)}</span>
+          <span class="food-price">${fmt(it.price)}</span>
+          <button class="btn btn-danger btn-sm" onclick="removeItem(${it.id})" style="margin-left:4px">ลบ</button>
+        </div>
+        ${assignSection}
+      </div>`;
+  }).join('');
+}
+
+function renderSummary() {
+  const vatOn = document.getElementById('vat-check').checked;
+  const vatPct = parseFloat(document.getElementById('vat-val').value) || 0;
+  const scOn = document.getElementById('sc-check').checked;
+  const scPct = parseFloat(document.getElementById('sc-val').value) || 0;
+  const mult = (1 + (scOn ? scPct / 100 : 0)) * (1 + (vatOn ? vatPct / 100 : 0));
+
+  const baseTotal = items.reduce((s, it) => s + it.price, 0);
+  const grandTotal = baseTotal * mult;
+
+  document.getElementById('grand-total').textContent = fmt(grandTotal);
+
+  const sw = document.getElementById('summary-wrap');
+  if (!members.length || !items.length) {
+    sw.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-icon">📋</div>
+      <div>กรุณาเพิ่มสมาชิกและรายการอาหารก่อน</div>
+    </div>`;
+    return;
+  }
+
+  const totals = {}, lists = {};
+  members.forEach(m => { totals[m.id] = 0; lists[m.id] = []; });
+
+  items.forEach(it => {
+    const targets = it.assigned.length > 0 ? it.assigned : members.map(m => m.id);
+    const share = it.price / targets.length;
+    targets.forEach(id => {
+      if (totals[id] !== undefined) {
+        totals[id] += share;
+        lists[id].push(`${it.name} (${fmt(share * mult)})`);
+      }
+    });
+  });
+
+  sw.innerHTML = members.map(m => {
+    const total = totals[m.id] * mult;
+    return `
+      <div class="person-summary">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${m.color};border-radius:var(--radius-lg) var(--radius-lg) 0 0"></div>
+        <div class="person-summary-header">
+          <div class="avatar" style="background:${m.color};width:28px;height:28px;font-size:11px">${initials(m.name)}</div>
+          <span class="person-summary-name">${escHtml(m.name)}</span>
+        </div>
+        <div class="person-summary-amount">${fmt(total)}</div>
+        <div class="person-summary-items">${lists[m.id].join(' · ') || '—'}</div>
+      </div>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+
+function getCalcData() {
+  const vatOn = document.getElementById('vat-check').checked;
+  const vatPct = parseFloat(document.getElementById('vat-val').value) || 0;
+  const scOn = document.getElementById('sc-check').checked;
+  const scPct = parseFloat(document.getElementById('sc-val').value) || 0;
+  const mult = (1 + (scOn ? scPct / 100 : 0)) * (1 + (vatOn ? vatPct / 100 : 0));
+  const totals = {}, lists = {};
+  members.forEach(m => { totals[m.id] = 0; lists[m.id] = []; });
+  items.forEach(it => {
+    const targets = it.assigned.length > 0 ? it.assigned : members.map(m => m.id);
+    const share = it.price / targets.length;
+    targets.forEach(id => {
+      if (totals[id] !== undefined) { totals[id] += share; lists[id].push(it.name); }
+    });
+  });
+  return { mult, totals, lists, vatOn, vatPct, scOn, scPct };
+}
+
+function exportPDF() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+  const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('print-meta').innerHTML = 'วันที่พิมพ์: ' + dateStr + '<br>เวลา: ' + timeStr + ' น.';
+  window.print();
+}
+
+function exportCSV() {
+  if (!members.length || !items.length) { alert('กรุณาเพิ่มสมาชิกและรายการอาหารก่อน'); return; }
+  const { mult, totals, lists, vatOn, vatPct, scOn, scPct } = getCalcData();
+  const now = new Date().toLocaleString('th-TH');
+  const baseTotal = items.reduce((s, it) => s + it.price, 0);
+  const grandTotal = baseTotal * mult;
+  const rows = [];
+  rows.push(['ระบบหารค่าอาหาร - Food Bill Splitter']);
+  rows.push(['วันที่', now]);
+  rows.push([]);
+  rows.push(['=== รายการอาหารทั้งหมด ===']);
+  rows.push(['ลำดับ', 'ชื่อเมนู', 'ราคา (บาท)', 'ผู้กิน']);
+  items.forEach((it, i) => {
+    const who = it.assigned.length > 0 ? it.assigned.map(id => { const m = members.find(m => m.id === id); return m ? m.name : ''; }).join(', ') : 'หารทุกคน';
+    rows.push([i + 1, it.name, it.price, who]);
+  });
+  rows.push([]);
+  rows.push(['=== การตั้งค่าภาษี ===']);
+  rows.push(['VAT', vatOn ? vatPct + '%' : 'ไม่คิด']);
+  rows.push(['Service Charge', scOn ? scPct + '%' : 'ไม่คิด']);
+  rows.push(['ยอดรวมก่อนภาษี', baseTotal.toFixed(2)]);
+  rows.push(['ยอดรวมทั้งหมด', grandTotal.toFixed(2)]);
+  rows.push([]);
+  rows.push(['=== สรุปยอดแต่ละคน ===']);
+  rows.push(['ชื่อสมาชิก', 'ยอดที่ต้องจ่าย (บาท)', 'รายการที่กิน']);
+  members.forEach(m => {
+    const total = totals[m.id] * mult;
+    rows.push([m.name, total.toFixed(2), lists[m.id].join(', ') || '-']);
+  });
+  const csvContent = '\uFEFF' + rows.map(row => row.map(cell => { const s = String(cell === undefined ? '' : cell); return (s.includes(',') || s.includes('\n') || s.includes('"')) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(',')).join('\r\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const d = new Date();
+  a.download = 'food_bill_' + d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+// Enter key shortcuts
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('member-input').addEventListener('keydown', e => { if (e.key === 'Enter') addMember(); });
+  document.getElementById('item-price-input').addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+  document.getElementById('item-name-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('item-price-input').focus(); });
+
+  // Demo data
+  members = [
+    { id: ++mid, name: 'แก้ว', color: COLORS[0] },
+    { id: ++mid, name: 'ต้น', color: COLORS[1] },
+    { id: ++mid, name: 'มิ้ว', color: COLORS[2] },
+  ];
+  items = [
+    { id: ++iid, name: 'ข้าวผัดกุ้ง', price: 120, assigned: [1], icon: '🍜' },
+    { id: ++iid, name: 'ต้มยำทะเล', price: 250, assigned: [1,2,3], icon: '🍲' },
+    { id: ++iid, name: 'น้ำส้มคั้น', price: 60, assigned: [2], icon: '🍹' },
+    { id: ++iid, name: 'สเต็กหมู', price: 180, assigned: [3], icon: '🥩' },
+  ];
+  renderMembers();
+  renderItems();
+});
+</script>
+</body>
+</html>
